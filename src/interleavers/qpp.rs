@@ -41,6 +41,16 @@ impl Qpp {
     }
 }
 
+impl IntoIterator for Qpp {
+    type Item = usize;
+
+    type IntoIter = QppIterator;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter()
+    }
+}
+
 pub struct QppIterator {
     k: usize,
     two_f2_mod_k: usize,
@@ -80,6 +90,11 @@ pub mod tests {
 
     #[test]
     fn iterator_and_pi_are_the_same() {
+        let qpp = Qpp::new(16, 1, 4);
+        for (i, int) in qpp.iter().enumerate() {
+            assert_eq!(qpp.pi(i), int);
+        }
+
         let qpp = Qpp::new(40, 3, 10);
         for (i, int) in qpp.iter().enumerate() {
             assert_eq!(qpp.pi(i), int);

@@ -2,7 +2,7 @@
 use crate::{BcjrDecoder, Llr, dword::DWord, simd::*};
 use alloc::{collections::VecDeque, vec::Vec};
 
-pub struct Umts;
+pub struct UmtsBcjrDecoder;
 
 struct StateBytes {
     /// The values for states 7-4.
@@ -11,7 +11,7 @@ struct StateBytes {
     s30: DWord,
 }
 
-impl BcjrDecoder for Umts {
+impl BcjrDecoder for UmtsBcjrDecoder {
     fn decode<
         Lu: Iterator<Item = Llr>,
         Lv: Iterator<Item = Llr>,
@@ -514,7 +514,7 @@ mod tests {
     use super::*;
     use crate::{bcjr::*, llr_vec};
 
-    static UMTS: Umts = Umts;
+    static UMTS: UmtsBcjrDecoder = UmtsBcjrDecoder;
 
     #[test]
     fn decode_byte() {

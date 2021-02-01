@@ -5,11 +5,16 @@
 #[macro_use]
 extern crate alloc;
 
+mod bcjr;
 mod simd;
 mod llr;
 mod dword;
 mod turbo;
-mod symbol;
+mod umts;
 pub mod interleavers;
 
-pub use llr::Llr;
+pub use self::{
+    bcjr::BcjrDecoder,
+    llr::Llr,
+    turbo::TurboDecoder,
+};
