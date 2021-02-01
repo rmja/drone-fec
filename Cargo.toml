@@ -1,0 +1,21 @@
+[package]
+name = "drone-fec"
+version = "0.1.0"
+authors = ["Rasmus Melchior Jacobsen <rmja@laesoe.org>"]
+edition = "2018"
+resolver = "2"
+repository = "https://github.com/rmja/drone-fec"
+readme = "README.md"
+license = "MIT OR Apache-2.0"
+description = """
+Fast Forward Error Correction algorithm implementations for Drone OS,
+including the BCJR decoder and the Turbo decoder.
+"""
+
+[badges]
+maintenance = { status = "actively-developed" }
+
+[features]
+cortex-m4 = []
+
+[dependencies]
