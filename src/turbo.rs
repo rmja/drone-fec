@@ -4,7 +4,10 @@ use alloc::vec::Vec;
 /// A Turbo decoder.
 pub struct TurboDecoder<B: BcjrDecoder> {
     /// The BCJR algoritm decoder.
-    bcjr: B,    
+    bcjr: B,
+    /// The a-posteriori log-likelihood ratios (produced by the first decoder).
+    l_app_deinterleaved: Vec<Llr>,
+    la_second: Vec<Llr>,
 }
 
 pub struct TurboDecodeIterator<'a, B: BcjrDecoder, I: IntoIterator<Item = usize> + Clone> {
@@ -15,15 +18,14 @@ pub struct TurboDecodeIterator<'a, B: BcjrDecoder, I: IntoIterator<Item = usize>
     second_decoder_systematic_termination: Option<&'a [Llr]>,
     second_decoder_parity: &'a [Llr],
     interleaver: I,
-    /// The a-posteriori log-likelihood ratios (produced by the first decoder).
-    l_app_deinterleaved: Vec<Llr>,
-    la_second: Vec<Llr>,
 }
 
 impl<B: BcjrDecoder> TurboDecoder<B> {
     pub fn new(bcjr: B) -> Self {
         Self {
             bcjr,
+            l_app_deinterleaved: vec![],
+            la_second: vec![],
         }
     }
 
@@ -46,8 +48,6 @@ impl<B: BcjrDecoder> TurboDecoder<B> {
             second_decoder_systematic_termination,
             second_decoder_parity,
             interleaver,
-            l_app_deinterleaved: vec![],
-            la_second: vec![],
         }
     }
 }
@@ -55,7 +55,7 @@ impl<B: BcjrDecoder> TurboDecoder<B> {
 impl<'a, B: BcjrDecoder, I: IntoIterator<Item = usize> + Clone> Iterator for TurboDecodeIterator<'a, B, I> {
     type Item = Vec<Llr>;
 
-    fn next<'b>(&'b mut self) -> Option<Self::Item> {
+    fn next(&mut self) -> Option<Self::Item> {
         let first_term_len = self.first_decoder_systematic_termination.map_or(0, |x| x.len());
         let second_term_len = self.second_decoder_systematic_termination.map_or(0, |x| x.len());
 
@@ -66,7 +66,7 @@ impl<'a, B: BcjrDecoder, I: IntoIterator<Item = usize> + Clone> Iterator for Tur
         //   second decoder in the following iterations.
 
         // Find the a-priori llr's La for the first decoder.
-        let l_app_deinterleaved = &self.l_app_deinterleaved;
+        let l_app_deinterleaved = &self.decoder.l_app_deinterleaved;
         let la_first = if l_app_deinterleaved.is_empty() {
             // This is the first iteration - all llr's are equiprobable.
 
@@ -74,7 +74,7 @@ impl<'a, B: BcjrDecoder, I: IntoIterator<Item = usize> + Clone> Iterator for Tur
         }
         else {
             let mut la_first = Vec::with_capacity(self.systematic.len() + first_term_len);
-            let la_second = &self.la_second;
+            let la_second = &self.decoder.la_second;
 
             la_first.extend(self.interleaver.clone().into_iter().enumerate().map(|(index, int_index)| {
                 // Compute the extrinsic information from the a-posteriori LLR (Lapp) from second decoder,
@@ -144,10 +144,10 @@ impl<'a, B: BcjrDecoder, I: IntoIterator<Item = usize> + Clone> Iterator for Tur
             l_app[de_index] = second_l_app[int_index];
         }
 
-        self.la_second = la_second;
-        self.l_app_deinterleaved = l_app;
+        self.decoder.la_second = la_second;
+        self.decoder.l_app_deinterleaved = l_app;
 
-        Some(self.l_app_deinterleaved.clone())
+        Some(self.decoder.l_app_deinterleaved.clone())
     }
 }
 
