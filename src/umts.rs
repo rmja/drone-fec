@@ -5,7 +5,9 @@ use alloc::{collections::VecDeque, vec::Vec};
 pub struct Umts;
 
 struct StateBytes {
+    /// The values for states 7-4.
     s74: DWord,
+    /// The values for states 3-0.
     s30: DWord,
 }
 
@@ -15,10 +17,6 @@ impl BcjrDecoder for Umts {
         Lv: Iterator<Item = Llr>,
         La: Iterator<Item = Llr>,
     >(&self, systematic: Lu, parity: Lv, apriori: La, terminated: bool) -> Vec<Llr> {
-        // assert!(systematic.len() >= 6);
-        // assert_eq!(systematic.len(), parity.len());
-        // assert_eq!(systematic.len(), apriori.len());
-
         let capacity = systematic.size_hint().1
             .or(parity.size_hint().1)
             .or(apriori.size_hint().1)
@@ -26,7 +24,7 @@ impl BcjrDecoder for Umts {
         let mut g_vector = Vec::with_capacity(capacity);
 
         for ((lu, lv), la) in systematic.zip(parity).zip(apriori) {
-            // Inner product of possible transmitted symbols and their received value
+            // Inner product of possible transmitted symbols and their received value.
             // G from state emitting u=0/v=0: 0*La + 0*LU - 0*LV
             // G from state emitting u=0/v=1: 0*La + 0*LU + 1*LV
             // G from state emitting u=1/v=0: 1*La + 1*LU - 0*LV
@@ -46,7 +44,7 @@ impl BcjrDecoder for Umts {
             g_vector.push(DWord::new_u32(u32::from_le_bytes(bytes)));
         }
 
-        assert!(g_vector.len() >= 6);
+        assert!(g_vector.len() >= 6, "The input is not long enough to open and close the trellis.");
 
         let mut a_vector = Vec::with_capacity(g_vector.len());
         let mut l_app = VecDeque::with_capacity(g_vector.len());
@@ -148,7 +146,6 @@ impl BcjrDecoder for Umts {
         } else {
             let b74 = DWord::new_u32(0x00000000);
             let b30 = DWord::new_u32(0x00000000);
-
 
             (b74, b30)
         };
