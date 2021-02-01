@@ -19,3 +19,4 @@ maintenance = { status = "actively-developed" }
 cortex-m4 = []
 
 [dependencies]
+streaming-iterator = "0.1"

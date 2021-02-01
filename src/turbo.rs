@@ -1,5 +1,6 @@
 use crate::{BcjrDecoder, Llr};
 use alloc::vec::Vec;
+use streaming_iterator::StreamingIterator;
 
 /// A Turbo decoder.
 pub struct TurboDecoder<B: BcjrDecoder> {
@@ -52,10 +53,10 @@ impl<B: BcjrDecoder> TurboDecoder<B> {
     }
 }
 
-impl<'a, B: BcjrDecoder, I: IntoIterator<Item = usize> + Clone> Iterator for TurboDecodeIterator<'a, B, I> {
+impl<'a, B: BcjrDecoder, I: IntoIterator<Item = usize> + Clone> StreamingIterator for TurboDecodeIterator<'a, B, I> {
     type Item = Vec<Llr>;
 
-    fn next(&mut self) -> Option<Self::Item> {
+    fn advance(&mut self) {
         let first_term_len = self.first_decoder_systematic_termination.map_or(0, |x| x.len());
         let second_term_len = self.second_decoder_systematic_termination.map_or(0, |x| x.len());
 
@@ -146,8 +147,10 @@ impl<'a, B: BcjrDecoder, I: IntoIterator<Item = usize> + Clone> Iterator for Tur
 
         self.decoder.la_second = la_second;
         self.decoder.l_app_deinterleaved = l_app;
+    }
 
-        Some(self.decoder.l_app_deinterleaved.clone())
+    fn get(&self) -> Option<&Self::Item> {
+        Some(&self.decoder.l_app_deinterleaved)
     }
 }
 
