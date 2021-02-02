@@ -1,0 +1,78 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(gdb) Launch debug",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/target/thumbv7em-none-eabihf/debug/example",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/opt/gcc-arm-none-eabi/bin/arm-none-eabi-gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "text": "file ${workspaceFolder}/target/thumbv7em-none-eabihf/debug/example"
+                },
+                {
+                    "text": "target remote 172.19.80.1:2331"
+                },
+                {
+                    "text": "monitor halt"
+                },
+                {
+                    "text": "load"
+                },
+                {
+                    "text": "monitor reset"
+                }
+            ]
+        },
+        {
+            "name": "(gdb) Launch release",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/target/thumbv7em-none-eabihf/release/example",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/opt/gcc-arm-none-eabi/bin/arm-none-eabi-gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "text": "file ${workspaceFolder}/target/thumbv7em-none-eabihf/release/example"
+                },
+                {
+                    "text": "target remote 172.19.80.1:2331"
+                },
+                {
+                    "text": "monitor halt"
+                },
+                {
+                    "text": "load"
+                },
+                {
+                    "text": "monitor reset"
+                }
+            ]
+        }
+    ]
+}

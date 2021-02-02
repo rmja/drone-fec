@@ -1,0 +1,30 @@
+[package]
+name = "example"
+version = "0.1.0"
+authors = ["Rasmus Melchior Jacobsen <rmja@laesoe.org>"]
+edition = "2018"
+resolver = "2"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name = "example"
+test = false
+doc = false
+
+[features]
+default = []
+std = [
+    "drone-core/std",
+]
+
+[dependencies]
+drone-core = { version = "0.14.0", path = "../../drone-core" }
+drone-cortexm = { version = "0.14.0", path = "../../drone-cortexm" }
+drone-stm32-map = { version = "0.14.0", path = "../../drone-stm32-map" }
+drone-fec = { version = "0.1.0", features = ["cortex-m4"], path = "../" }
+
+[profile.release]
+lto = true
+debug = true
+panic = "abort"
