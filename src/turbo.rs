@@ -157,9 +157,9 @@ impl<'a, B: BcjrDecoder, I: IntoIterator<Item = usize> + Clone> StreamingIterato
                 let l_app = l_app_first[int_index];
                 let l_a = la_first[int_index];
                 let l_u = self.systematic[int_index];
-                let l_e = l_app.saturating_sub(l_a).saturating_sub(l_u);
 
-                l_e
+                // Emit the extrinsic L_e from the first decoder as L_a for the second.
+                l_app.saturating_sub(l_a).saturating_sub(l_u)
             })
             // The extrinsic information is not valid for the termination.
             .chain(repeat(Llr::ZERO).take(second_term_len))
@@ -199,7 +199,7 @@ impl<'a, B: BcjrDecoder, I: IntoIterator<Item = usize> + Clone> StreamingIterato
     }
 }
 
-#[cfg(test)]
+#[cfg(any(test, target_tests))]
 pub mod tests {
     use crate::{interleavers::qpp::Qpp, llr_vec, trellises::lte::UmtsTrellis};
 
@@ -207,6 +207,10 @@ pub mod tests {
 
     #[test]
     fn decode_excel_example() {
+        decode_excel_example_impl();
+    }
+
+    pub fn decode_excel_example_impl() {
         let systematic = llr_vec![-4, -4, -4, 4, -4, -4, 4, 4, -4, -4, -4, -4, -4, -4, 4, -4,];
         let first_decoder_systematic_termination = llr_vec![4, -4, 4,];
         let first_decoder_parity =

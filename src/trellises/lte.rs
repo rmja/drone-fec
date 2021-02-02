@@ -38,11 +38,16 @@ impl BcjrDecoder for UmtsTrellis {
             let g1p0 = la.0 as i32 + lu.0 as i32;
             let g1p1 = g0p1 + g1p0;
 
+            let g0p0: i8 = 0;
+            let g0p1: i8 = g0p1.saturate_into();
+            let g1p0: i8 = g1p0.saturate_into();
+            let g1p1: i8 = g1p1.saturate_into();
+
             let bytes = [
-                0,
-                (g0p1.saturate_bits(8) as u8),
-                (g1p0.saturate_bits(8) as u8),
-                (g1p1.saturate_bits(8) as u8),
+                g0p0 as u8,
+                g0p1 as u8,
+                g1p0 as u8,
+                g1p1 as u8,
             ];
 
             g_vector.push(DWord::new_u32(u32::from_le_bytes(bytes)));
@@ -57,7 +62,7 @@ impl BcjrDecoder for UmtsTrellis {
         let mut l_app = VecDeque::with_capacity(g_vector.len());
 
         let (forward, tail) = g_vector.split_at(g_vector.len() - 3);
-        let mut forward = forward.iter().map(|x| *x);
+        let mut forward = forward.iter().copied();
 
         // Only s0 is valid.
         let mut a74 = DWord::new_u32(0x80808080);

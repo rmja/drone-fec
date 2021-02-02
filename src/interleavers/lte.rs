@@ -210,7 +210,7 @@ impl LteQpp {
     }
 
     fn get_params(k: usize) -> Option<(usize, usize)> {
-        if k >= 5 * 8 && k <= 64 * 8 {
+        if (5 * 8..=64 * 8).contains(&k) {
             let index = (k - 5 * 8) / 8;
             if 5 * 8 + index * 8 == k {
                 let (f1, f2) = Self::F_K5_K64_STEP1[index];
@@ -218,7 +218,7 @@ impl LteQpp {
             } else {
                 None
             }
-        } else if k >= 66 * 8 && k <= 128 * 8 {
+        } else if (66 * 8..=128 * 8).contains(&k) {
             let index = (k - 66 * 8) / 16;
             if 66 * 8 + index * 16 == k {
                 let (f1, f2) = Self::F_K66_K128_STEP2[index];
@@ -226,7 +226,7 @@ impl LteQpp {
             } else {
                 None
             }
-        } else if k >= 132 * 8 && k <= 256 * 8 {
+        } else if (132 * 8..=256 * 8).contains(&k) {
             let index = (k - 132 * 8) / 32;
             if 132 * 8 + index * 32 == k {
                 let (f1, f2) = Self::F_K132_K256_STEP4[index];
@@ -234,7 +234,7 @@ impl LteQpp {
             } else {
                 None
             }
-        } else if k >= 264 * 8 && k <= 768 * 8 {
+        } else if (264 * 8..=768 * 8).contains(&k) {
             let index = (k - 264 * 8) / 64;
             if 264 * 8 + index * 64 == k {
                 let (f1, f2) = Self::F_K264_K768_STEP8[index];

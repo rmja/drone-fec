@@ -161,10 +161,10 @@ impl Shr<usize> for DWord {
     }
 }
 
-impl SaturateBits for DWord {
+impl SaturateBits<Self> for DWord {
     #[inline(always)]
-    fn saturate_bits(self, bits: usize) -> Self {
-        DWord::new_u32(self.u32().saturate_bits(bits))
+    fn saturate_bits<const BITS: usize>(self) -> Self {
+        DWord::new_u32(self.i32().saturate_bits::<BITS>())
     }
 }
 
