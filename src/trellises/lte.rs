@@ -1,4 +1,6 @@
 //! UMTS BCJR Decoder
+#![allow(unused_attributes)]
+#![rustfmt::skip]
 use crate::{dword::DWord, simd::*, BcjrDecoder, Llr};
 use alloc::{collections::VecDeque, vec::Vec};
 
@@ -19,9 +21,7 @@ impl BcjrDecoder for UmtsTrellis {
         apriori: La,
         terminated: bool,
     ) -> Vec<Llr> {
-        let capacity = systematic
-            .size_hint()
-            .1
+        let capacity = systematic.size_hint().1
             .or(parity.size_hint().1)
             .or(apriori.size_hint().1)
             .unwrap_or_else(|| systematic.size_hint().0);
@@ -226,14 +226,14 @@ fn compute_a74(a74_prev: DWord, a30_prev: DWord, g: DWord) -> DWord {
     let a74 =                           // pr     cr u/v
         ((a74_prev & 0x00FFFF00) <<  8) |   // s6 --> s7 0/0
                                             // s5 --> s6 0/1
-        ((a30_prev & 0x00FFFF00) >>  8); // s2 --> s5 0/1
-                                         // s1 --> s4 0/0
+        ((a30_prev & 0x00FFFF00) >>  8);    // s2 --> s5 0/1
+                                            // s1 --> s4 0/0
 
     let g74 =                           // pr     cr u/v
         ((g & 0x000000FF ) << 24) |         // s6 <-> s7 0/0
         ((g & 0x0000FF00 ) <<  8) |         // s5 <-> s6 0/1
-        ((g & 0x0000FFFF )      ); // s2 <-> s5 0/1
-                                   // s1 <-> s4 0/0
+        ((g & 0x0000FFFF )      );          // s2 <-> s5 0/1
+                                            // s1 <-> s4 0/0
 
     let zero74 = a74.saturating_add_i8(g74);
 
@@ -242,13 +242,13 @@ fn compute_a74(a74_prev: DWord, a30_prev: DWord, g: DWord) -> DWord {
         ((a74_prev & 0xFF000000)      ) |   // s7 --> s7 1/1
         ((a74_prev & 0x000000FF) << 16) |   // s4 --> s6 1/0
         ((a30_prev & 0xFF000000) >> 16) |   // s3 --> s5 1/0
-        ((a30_prev & 0x000000FF)      ); // s0 --> s4 1/1
+        ((a30_prev & 0x000000FF)      );    // s0 --> s4 1/1
 
     let g74 =                           // pr     cr u/v
         ((g & 0xFFFF0000)      ) |          // s7 <-> s7 1/1
                                             // s4 <-> s6 1/0
         ((g & 0x00FF0000) >>  8) |          // s3 <-> s5 1/0
-        ((g & 0xFF000000) >> 24); // s0 <-> s4 1/1
+        ((g & 0xFF000000) >> 24);           // s0 <-> s4 1/1
 
     let one74 = a74.saturating_add_i8(g74);
 
@@ -262,13 +262,13 @@ fn compute_a30(a74_prev: DWord, a30_prev: DWord, g: DWord) -> DWord {
         ((a74_prev & 0xFF000000)      ) |   // s7 --> s3 0/0
         ((a74_prev & 0x000000FF) << 16) |   // s4 --> s2 0/1
         ((a30_prev & 0xFF000000) >> 16) |   // s3 --> s1 0/1
-        ((a30_prev & 0x000000FF)      ); // s0 --> s0 0/0
+        ((a30_prev & 0x000000FF)      );    // s0 --> s0 0/0
 
     let g30 =                           // pr     cr u/v
         ((g & 0x000000FF) << 24) |          // s7 <-> s3 0/0
         ((g & 0x0000FF00) <<  8) |          // s4 <-> s2 0/1
-        ((g & 0x0000FFFF)      ); // s3 <-> s1 0/1
-                                  // s0 <-> s0 0/0
+        ((g & 0x0000FFFF)      );           // s3 <-> s1 0/1
+                                            // s0 <-> s0 0/0
 
     let zero30 = a30.saturating_add_i8(g30);
 
@@ -276,14 +276,14 @@ fn compute_a30(a74_prev: DWord, a30_prev: DWord, g: DWord) -> DWord {
     let a30 =                           // pr     cr u/v
         ((a74_prev & 0x00FFFF00) << 8) |    // s6 --> s3 1/1
                                             // s5 --> s2 1/0
-        ((a30_prev & 0x00FFFF00) >> 8); // s2 --> s1 1/0
-                                        // s1 --> s0 1/1
+        ((a30_prev & 0x00FFFF00) >> 8);     // s2 --> s1 1/0
+                                            // s1 --> s0 1/1
 
     let g30 =                           // pr     cr u/v
         ((g & 0xFFFF0000)      ) |          // s6 <-> s3 1/1
                                             // s5 <-> s2 1/0
         ((g & 0x00FF0000) >>  8) |          // s2 <-> s1 1/0
-        ((g & 0xFF000000) >> 24); // s1 <-> s0 1/1
+        ((g & 0xFF000000) >> 24);           // s1 <-> s0 1/1
 
     let one30 = a30.saturating_add_i8(g30);
 
@@ -297,13 +297,13 @@ fn compute_b74(b74_next: DWord, b30_next: DWord, g: DWord) -> DWord {
         ((b30_next & 0xFF000000)      ) |   // s7 <-- s3 0/0
         ((b74_next & 0xFFFF0000) >>  8) |   // s6 <-- s7 0/0
                                             // s5 <-- s6 0/1
-        ((b30_next & 0x00FF0000) >> 16); // s4 <-- s2 0/1
+        ((b30_next & 0x00FF0000) >> 16);    // s4 <-- s2 0/1
 
     let g74 =                           // cr     nx u/v
         ((g & 0x000000FF) << 24) |          // s7 <-> s3 0/0
         ((g & 0x000000FF) << 16) |          // s6 <-> s7 0/0
         ((g & 0x0000FF00)      ) |          // s5 <-> s6 0/1
-        ((g & 0x0000FF00) >>  8); // s4 <-> s2 0/1
+        ((g & 0x0000FF00) >>  8);           // s4 <-> s2 0/1
 
     let zero74 = b74.saturating_add_i8(g74);
 
@@ -312,13 +312,13 @@ fn compute_b74(b74_next: DWord, b30_next: DWord, g: DWord) -> DWord {
         ((b74_next & 0xFF000000)      ) |   // s7 <-- s7 1/1
         ((b30_next & 0xFFFF0000) >>  8) |   // s6 <-- s3 1/1
                                             // s5 <-- s2 1/0
-        ((b74_next & 0x00FF0000) >> 16); // s4 <-- s6 1/0
+        ((b74_next & 0x00FF0000) >> 16);    // s4 <-- s6 1/0
 
     let g74 =                           // cr     nx u/v
         ((g & 0xFF000000)      ) |          // s7 <-> s7 1/1
         ((g & 0xFFFF0000) >>  8) |          // s6 <-> s3 1/1
                                             // s5 <-> s2 1/0
-        ((g & 0x00FF0000) >> 16); // s4 <-> s6 1/0
+        ((g & 0x00FF0000) >> 16);           // s4 <-> s6 1/0
 
     let one74 = b74.saturating_add_i8(g74);
 
@@ -332,13 +332,13 @@ fn compute_b30(b74_next: DWord, b30_next: DWord, g: DWord) -> DWord {
         ((b30_next & 0x0000FF00) << 16) |   // s3 <-- s1 0/1
         ((b74_next & 0x0000FFFF) <<  8) |   // s2 <-- s5 0/1
                                             // s1 <-- s4 0/0
-        ((b30_next & 0x000000FF)      ); // s0 <-- s0 0/0
+        ((b30_next & 0x000000FF)      );    // s0 <-- s0 0/0
 
     let g30 =                           // cr     nx u/v
         ((g & 0x0000FF00) << 16) |          // s3 <-> s1 0/1
         ((g & 0x0000FFFF) <<  8) |          // s2 <-> s5 0/1
                                             // s1 <-> s4 0/0
-        ((g & 0x000000FF)      ); // s0 <-> s0 0/0
+        ((g & 0x000000FF)      );           // s0 <-> s0 0/0
 
     let zero30 = b30.saturating_add_i8(g30);
 
@@ -347,13 +347,13 @@ fn compute_b30(b74_next: DWord, b30_next: DWord, g: DWord) -> DWord {
         ((b74_next & 0x0000FF00) << 16) |   // s3 <-- s5 1/0
         ((b30_next & 0x0000FFFF) <<  8) |   // s2 <-- s1 1/0
                                             // s1 <-- s0 1/1
-        ((b74_next & 0x000000FF)      ); // s0 <-- s4 1/1
+        ((b74_next & 0x000000FF)      );    // s0 <-- s4 1/1
 
     let g30 =                           // cr     nx u/v
         ((g & 0x00FF0000 ) <<  8) |         // s3 <-> s5 1/0
         ((g & 0x00FF0000 )      ) |         // s2 <-> s1 1/0
         ((g & 0xFF000000 ) >> 16) |         // s1 <-> s0 1/1
-        ((g & 0xFF000000 ) >> 24); // s0 <-> s4 1/1
+        ((g & 0xFF000000 ) >> 24);          // s0 <-> s4 1/1
 
     let one30 = b30.saturating_add_i8(g30);
 
@@ -371,31 +371,35 @@ fn compute_max0(
     a30_valid: u32,
 ) -> Llr {
     // States 7-4.
-    let g74 = ((g & 0x000000FF) << 24) |          // s7 <-> s3 0/0
+    let g74 =
+        ((g & 0x000000FF) << 24) |          // s7 <-> s3 0/0
         ((g & 0x000000FF) << 16) |          // s6 <-> s7 0/0
         ((g & 0x0000FF00)      ) |          // s5 <-> s6 0/1
-        ((g & 0x0000FF00) >>  8); // s4 <-> s2 0/1
+        ((g & 0x0000FF00) >>  8);           // s4 <-> s2 0/1
 
     // Align B for u=0 according to A.
-    let b_for74 = ((b30 & 0xFF000000)      ) |        // s7 <-- s3 0/0
+    let b_for74 =
+        ((b30 & 0xFF000000)      ) |        // s7 <-- s3 0/0
         ((b74 & 0xFFFF0000) >>  8) |        // s6 <-- s7 0/0
                                             // s5 <-- s6 0/1
-        ((b30 & 0x00FF0000) >> 16); // s4 <-- s2 0/1
+        ((b30 & 0x00FF0000) >> 16);         // s4 <-- s2 0/1
 
     let sum74 = (a74.saturating_add_i8(g74.saturating_add_i8(b_for74)) & a74_valid)
         | (0x80808080 & !a74_valid);
 
     // States 3-0.
-    let g30 = ((g & 0x0000FF00) << 16) |          // s3 <-> s1 0/1
+    let g30 =
+        ((g & 0x0000FF00) << 16) |          // s3 <-> s1 0/1
         ((g & 0x0000FFFF) <<  8) |          // s2 <-> s5 0/1
                                             // s1 <-> s4 0/0
-        ((g & 0x000000FF)      ); // s0 <-> s0 0/0
+        ((g & 0x000000FF)      );           // s0 <-> s0 0/0
 
     // Align B for u=0 according to A.
-    let b_for30 = ((b30 & 0x0000FF00) << 16) |        // s3 <-- s1 0/1
+    let b_for30 =
+        ((b30 & 0x0000FF00) << 16) |        // s3 <-- s1 0/1
         ((b74 & 0x0000FFFF) <<  8) |        // s2 <-- s5 0/1
                                             // s1 <-- s4 0/0
-        ((b30 & 0x000000FF)      ); // s0 <-- s0 0/0
+        ((b30 & 0x000000FF)      );         // s0 <-- s0 0/0
 
     let sum30 = (a30.saturating_add_i8(g30.saturating_add_i8(b_for30)) & a30_valid)
         | (0x80808080 & !a30_valid);
@@ -417,31 +421,35 @@ fn compute_max1(
     a30_valid: u32,
 ) -> Llr {
     // States 7-4.
-    let g74 = ((g & 0xFF000000)      ) |          // s7 <-> s7 1/1
+    let g74 =
+        ((g & 0xFF000000)      ) |          // s7 <-> s7 1/1
         ((g & 0xFFFF0000) >>  8) |          // s6 <-> s3 1/1
                                             // s5 <-> s2 1/0
-        ((g & 0x00FF0000) >> 16); // s4 <-> s6 1/0
+        ((g & 0x00FF0000) >> 16);           // s4 <-> s6 1/0
 
     // Align B for u=1 according to A.
-    let b_for74 = ((b74 & 0xFF000000)      ) |        // s7 <-- s7 1/1
+    let b_for74 =
+        ((b74 & 0xFF000000)      ) |        // s7 <-- s7 1/1
         ((b30 & 0xFFFF0000) >>  8) |        // s6 <-- s3 1/1
                                             // s5 <-- s2 1/0
-        ((b74 & 0x00FF0000) >> 16); // s4 <-- s6 1/0
+        ((b74 & 0x00FF0000) >> 16);         // s4 <-- s6 1/0
 
     let sum74 = (a74.saturating_add_i8(g74.saturating_add_i8(b_for74)) & a74_valid)
         | (0x80808080 & !a74_valid);
 
     // States 3-0.
-    let g30 = ((g & 0x00FF0000) <<  8) |          // s3 <-> s5 1/0
+    let g30 =
+        ((g & 0x00FF0000) <<  8) |          // s3 <-> s5 1/0
         ((g & 0x00FF0000)      ) |          // s2 <-> s1 1/0
         ((g & 0xFF000000) >> 16) |          // s1 <-> s0 1/1
-        ((g & 0xFF000000) >> 24); // s0 <-> s4 1/1
+        ((g & 0xFF000000) >> 24);           // s0 <-> s4 1/1
 
     // Align B for u=1 according to A.
-    let b_for30 = ((b74 & 0x0000FF00) << 16) |        // s3 <-- s5 1/0
+    let b_for30 =
+        ((b74 & 0x0000FF00) << 16) |        // s3 <-- s5 1/0
         ((b30 & 0x0000FFFF) <<  8) |        // s2 <-- s1 1/0
                                             // s1 <-- s0 1/1
-        ((b74 & 0x000000FF)); // s0 <-- s4 1/1
+        ((b74 & 0x000000FF));               // s0 <-- s4 1/1
 
     let sum30 = (a30.saturating_add_i8(g30.saturating_add_i8(b_for30)) & a30_valid)
         | (0x80808080 & (!a30_valid));
