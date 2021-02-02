@@ -10,8 +10,8 @@ mod simd;
 mod llr;
 pub mod dword;
 mod turbo;
-mod umts;
 pub mod interleavers;
+pub mod trellises;
 
 pub use self::{
     bcjr::BcjrDecoder,

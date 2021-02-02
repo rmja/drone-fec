@@ -170,7 +170,7 @@ impl<'a, B: BcjrDecoder, I: IntoIterator<Item = usize> + Clone> StreamingIterato
 
 #[cfg(test)]
 pub mod tests {
-    use crate::{interleavers::qpp::Qpp, llr_vec, umts::UmtsBcjrDecoder};
+    use crate::{interleavers::qpp::Qpp, llr_vec, trellises::lte::UmtsTrellis};
 
     use super::*;
 
@@ -197,7 +197,7 @@ pub mod tests {
             -4, -4, -4,
         ];
 
-        let mut turbo = TurboDecoder::new(UmtsBcjrDecoder);
+        let mut turbo = TurboDecoder::new(UmtsTrellis);
         let interleaver = Qpp::new(16, 1, 4);
 
         let mut iterator = turbo.decode(
