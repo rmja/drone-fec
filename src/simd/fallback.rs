@@ -6,8 +6,7 @@ const fn half_add(lhs: i8, rhs: i8) -> i8 {
     let sum = lhs as i16 + rhs as i16;
     if sum >= 0 {
         (sum / 2) as i8
-    }
-    else {
+    } else {
         ((sum - 1) / 2) as i8
     }
 }
@@ -17,8 +16,7 @@ const fn half_sub(lhs: i8, rhs: i8) -> i8 {
     let sum = lhs as i16 - rhs as i16;
     if sum >= 0 {
         (sum / 2) as i8
-    }
-    else {
+    } else {
         ((sum - 1) / 2) as i8
     }
 }

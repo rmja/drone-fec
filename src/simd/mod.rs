@@ -56,7 +56,6 @@ pub trait CmpExt {
     fn min_i8(self, rhs: Self) -> Self;
 }
 
-
 #[cfg(any(test, target_tests))]
 pub mod tests {
     use crate::dword::DWord;
