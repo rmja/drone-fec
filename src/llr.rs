@@ -1,7 +1,5 @@
 /// Log-Likelihood Ratio.
-
-use alloc::vec::Vec;
-
+/// A value >0 means a likely 1, and <0 a likely 0.
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Llr(pub i8);
 
@@ -23,6 +21,7 @@ impl Llr {
         Llr(self.0.saturating_sub(rhs.0))
     }
 
+    /// Make a hard decode decision.
     pub fn hard(self) -> bool {
         self.0 > 0
     }

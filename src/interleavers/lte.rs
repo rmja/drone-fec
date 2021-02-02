@@ -1,5 +1,6 @@
 use super::qpp::Qpp;
 
+/// LTE QPP Interleaver.
 pub struct LteQpp;
 
 impl LteQpp {
@@ -62,6 +63,7 @@ impl LteQpp {
         (47,186), (23,94), (47,190), (263,480),
     ];
 
+    /// Get an interleaver for the block length `k` (in bits).
     pub fn get(k: usize) -> Option<Qpp> {
         Self::get_params(k).map(|(f1, f2)| Qpp::new(k, f1, f2))
     }

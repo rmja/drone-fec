@@ -8,7 +8,7 @@ extern crate alloc;
 mod bcjr;
 mod simd;
 mod llr;
-mod dword;
+pub mod dword;
 mod turbo;
 mod umts;
 pub mod interleavers;
