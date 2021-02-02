@@ -5,7 +5,7 @@
 Blazing fast implmentation of various forward error correction algorithms optimized for embedded systems.
 The crate contains:
 
-* A BCJR decoder, parallelized using the `SIMD` instructions for `Cortex-M4`.
+* An 8-state BCJR `3GPP` decoder, parallelized using the `SIMD` instructions for `Cortex-M4`.
 * A Turbo decoder.
 * An iterative QPP interleaver, with parameters from `3GPP`.
 
