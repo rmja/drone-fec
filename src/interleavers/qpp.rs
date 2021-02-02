@@ -18,7 +18,7 @@ pub struct Qpp {
 
 impl Qpp {
     pub const fn new(k: usize, f1: usize, f2: usize) -> Self {
-        Self {k, f1, f2}
+        Self { k, f1, f2 }
     }
 
     /// Get the interleaved index.
@@ -33,10 +33,10 @@ impl Qpp {
     pub fn iter(&self) -> QppIterator {
         QppIterator {
             k: self.k,
-            two_f2_mod_k: (2*self.f2) % self.k,
+            two_f2_mod_k: (2 * self.f2) % self.k,
             pi: 0,
             g: (self.f1 + self.f2) % self.k,
-            i: 0
+            i: 0,
         }
     }
 }

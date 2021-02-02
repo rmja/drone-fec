@@ -1,5 +1,5 @@
-use core::ops::{BitAnd, BitOr, Shl, Shr};
 use crate::simd::*;
+use core::ops::{BitAnd, BitOr, Shl, Shr};
 
 /// A 32bit DWORD.
 #[derive(Clone, Copy)]
@@ -45,13 +45,23 @@ impl DWord {
     /// Get the bytes such that [0] is the MSB and [3] is the LSB.
     #[inline]
     pub const fn i8be(self) -> [i8; 4] {
-        unsafe { Self{ u32: self.u32.to_be() }.i8 }
+        unsafe {
+            Self {
+                u32: self.u32.to_be(),
+            }
+            .i8
+        }
     }
 
     /// Get the bytes such that [0] is the LSB and [3] is the MSB.
     #[inline]
     pub const fn i8le(self) -> [i8; 4] {
-        unsafe { Self{ u32: self.u32.to_le() }.i8 }
+        unsafe {
+            Self {
+                u32: self.u32.to_le(),
+            }
+            .i8
+        }
     }
 
     /// Get the bytes in host order
@@ -63,23 +73,37 @@ impl DWord {
     /// Get the bytes such that [0] is the MSB and [3] is the LSB.
     #[inline]
     pub const fn u8be(self) -> [u8; 4] {
-        unsafe { Self{ u32: self.u32.to_be() }.u8 }
+        unsafe {
+            Self {
+                u32: self.u32.to_be(),
+            }
+            .u8
+        }
     }
 
     /// Get the bytes such that [0] is the LSB and [3] is the MSB.
     #[inline]
     pub const fn u8le(self) -> [u8; 4] {
-        unsafe { Self{ u32: self.u32.to_le() }.u8 }
+        unsafe {
+            Self {
+                u32: self.u32.to_le(),
+            }
+            .u8
+        }
     }
 
     #[inline]
     pub const fn rotate_right(self, n: u32) -> Self {
-        Self { u32: self.u32().rotate_right(n) }
+        Self {
+            u32: self.u32().rotate_right(n),
+        }
     }
 
     #[inline]
     pub const fn rotate_left(self, n: u32) -> Self {
-        Self { u32: self.u32().rotate_left(n) }
+        Self {
+            u32: self.u32().rotate_left(n),
+        }
     }
 }
 

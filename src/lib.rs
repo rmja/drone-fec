@@ -6,15 +6,11 @@
 extern crate alloc;
 
 mod bcjr;
-mod simd;
-mod llr;
 pub mod dword;
-mod turbo;
 pub mod interleavers;
+mod llr;
+mod simd;
 pub mod trellises;
+mod turbo;
 
-pub use self::{
-    bcjr::BcjrDecoder,
-    llr::Llr,
-    turbo::TurboDecoder,
-};
+pub use self::{bcjr::BcjrDecoder, llr::Llr, turbo::TurboDecoder};

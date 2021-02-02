@@ -26,8 +26,7 @@ impl SaturateBits for i32 {
             let max_value = ((1u32 << (bits - 1)) - 1) as i32;
             let min_value = (-max_value) - 1;
             self.min(max_value).max(min_value)
-        }
-        else {
+        } else {
             0
         }
     }
@@ -61,7 +60,8 @@ macro_rules! impl_simd {
                     lhs[1].saturating_add(rhs[1]),
                     lhs[2].saturating_add(rhs[2]),
                     lhs[3].saturating_add(rhs[3]),
-                ]).$type()
+                ])
+                .$type()
             }
 
             #[inline(always)]
@@ -73,7 +73,8 @@ macro_rules! impl_simd {
                     lhs[1].saturating_sub(rhs[1]),
                     lhs[2].saturating_sub(rhs[2]),
                     lhs[3].saturating_sub(rhs[3]),
-                ]).$type()
+                ])
+                .$type()
             }
         }
 
@@ -87,7 +88,8 @@ macro_rules! impl_simd {
                     half_add(lhs[1], rhs[1]),
                     half_add(lhs[2], rhs[2]),
                     half_add(lhs[3], rhs[3]),
-                ]).$type()
+                ])
+                .$type()
             }
 
             #[inline(always)]
@@ -99,10 +101,11 @@ macro_rules! impl_simd {
                     half_sub(lhs[1], rhs[1]),
                     half_sub(lhs[2], rhs[2]),
                     half_sub(lhs[3], rhs[3]),
-                ]).$type()
+                ])
+                .$type()
             }
         }
-        
+
         impl CmpExt for $type {
             #[inline(always)]
             fn max_i8(self: $type, rhs: Self) -> Self {
@@ -113,7 +116,8 @@ macro_rules! impl_simd {
                     lhs[1].max(rhs[1]),
                     lhs[2].max(rhs[2]),
                     lhs[3].max(rhs[3]),
-                ]).$type()
+                ])
+                .$type()
             }
 
             #[inline(always)]
@@ -125,7 +129,8 @@ macro_rules! impl_simd {
                     lhs[1].min(rhs[1]),
                     lhs[2].min(rhs[2]),
                     lhs[3].min(rhs[3]),
-                ]).$type()
+                ])
+                .$type()
             }
         }
     };
@@ -167,7 +172,7 @@ mod tests {
         assert_eq!(255, 255_u32.saturate_bits(8));
         assert_eq!(255, 256_u32.saturate_bits(8));
 
-        assert_eq!(u32::MAX, u32::MAX.saturate_bits(32));        
+        assert_eq!(u32::MAX, u32::MAX.saturate_bits(32));
     }
 
     #[test]
@@ -214,10 +219,7 @@ mod tests {
     fn max() {
         let lhs = DWord::new_i8h([100, 1, 0, -100]).u32();
         let rhs = DWord::new_i8h([27, -128, -128, -29]).u32();
-        assert_eq!(
-            DWord::new_i8h([100, 1, 0, -29]).u32(),
-            lhs.max_i8(rhs)
-        )
+        assert_eq!(DWord::new_i8h([100, 1, 0, -29]).u32(), lhs.max_i8(rhs))
     }
 
     #[test]

@@ -9,9 +9,11 @@ pub trait BcjrDecoder {
     /// * `L_a` is the `a-priori` part.
     /// All parts must have the same number of elements.
     /// The returned a-posteriori values has the same length as the input.
-    fn decode<
-        Lu: Iterator<Item = Llr>,
-        Lv: Iterator<Item = Llr>,
-        La: Iterator<Item = Llr>,
-    >(&self, systematic: Lu, parity: Lv, apriori: La, terminated: bool) -> Vec<Llr>;
+    fn decode<Lu: Iterator<Item = Llr>, Lv: Iterator<Item = Llr>, La: Iterator<Item = Llr>>(
+        &self,
+        systematic: Lu,
+        parity: Lv,
+        apriori: La,
+        terminated: bool,
+    ) -> Vec<Llr>;
 }
