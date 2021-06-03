@@ -1,6 +1,6 @@
 //! UMTS BCJR Decoder
 #![allow(unused_attributes)]
-#![rustfmt::skip]
+#![cfg_attr(rustfmt, rustfmt_skip)]
 use crate::{dword::DWord, simd::*, BcjrDecoder, Llr};
 use alloc::{collections::VecDeque, vec::Vec};
 
@@ -547,7 +547,7 @@ fn scale_coeff8(values74: DWord, values30: DWord) -> DWord {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{bcjr::*, llr_vec};
+    use crate::llr_vec;
 
     static UMTS: UmtsTrellis = UmtsTrellis;
 
