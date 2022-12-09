@@ -1,4 +1,6 @@
-![maintenance](https://img.shields.io/badge/maintenance-actively--developed-brightgreen.svg)
+![maintenance-status](https://img.shields.io/badge/maintenance-deprecated-red.svg)
+
+> The work on this crate is continued in https://github.com/rmja/fastfec
 
 # drone-fec
 
